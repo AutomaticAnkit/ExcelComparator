@@ -9,12 +9,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -216,7 +219,7 @@ public class csvUtils {
 		CSVFile2.close();
 		boolean tableFlag = false;
 		
-		int var = 0;
+		double var = 0;
 		System.out.println("size of ist" + al1.size());
 		for (int i = 0; i < al1.size();) {
 			for (int x = 1; x <= noOfTables;) {				
@@ -355,12 +358,32 @@ public class csvUtils {
 			}	
 			
 		}
-		FileOutputStream fileOut = new FileOutputStream(finalExcelFolderPath + finalOutputExcelFile +".xlsx");
+		String end = getDate()+ "_" + getTime();
+		FileOutputStream fileOut = new FileOutputStream(finalExcelFolderPath + finalOutputExcelFile +end+".xlsx");
 		wb.write(fileOut);
 		fileOut.close();
 
 		System.out.println("File Created sucessfully.");
 	}
+	
+	
+	  
+	  private  final static String getDate(  )  
+	  {
+	        DateFormat df = new SimpleDateFormat( "dd-MM-yyyy" ) ;
+	        df.setTimeZone( TimeZone.getTimeZone( "IST" )  ) ;
+	        return ( df.format( new Date(  )  )  ) ;
+	   }
+	  
+	 private  final static String getTime(  ) 
+	 {
+	        DateFormat df = new SimpleDateFormat( "hh-mm-ss" ) ;
+	        //df.setTimeZone ( TimeZone.getTimeZone ( "PST" )  ) ;
+	        df.setTimeZone( TimeZone.getTimeZone( "IST" )  ) ;
+	         
+	         
+	        return ( df.format( new Date(  )  )  ) ;
+	    }
 		
 
 	
@@ -433,7 +456,7 @@ private static int tableRowCount(int xLoop) throws IOException {
 		return tColCount;
 	}
 
-	private static String calculateWRTVariance(double itemList1, double itemList2, int var) {
+	private static String calculateWRTVariance(double itemList1, double itemList2, double var) {
 		String result = "";
 
 		if (itemList1 < itemList2) {
@@ -452,16 +475,16 @@ private static int tableRowCount(int xLoop) throws IOException {
 		return result;
 	}
 	
-	private static int varianceCalculator(int tableColumnCount, int iloop, int tableNumber) throws IOException {
+	private static double varianceCalculator(int tableColumnCount, int iloop, int tableNumber) throws IOException {
 		
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
-		int VarianceCol1 = 0;
-		int VarianceCol2 = 0;
-		int VarianceCol3 = 0;
-		int VarianceCol4 = 0;
-		int VarianceCol5 = 0;
+		double VarianceCol1 = 0;
+		double VarianceCol2 = 0;
+		double VarianceCol3 = 0;
+		double VarianceCol4 = 0;
+		double VarianceCol5 = 0;
 		
 		switch(tableColumnCount) {
 		case 1:
@@ -491,7 +514,7 @@ private static int tableRowCount(int xLoop) throws IOException {
 			break;
 		}
 				
-		int variance = 0;
+		double variance = 0;
 		
 		switch(tableColumnCount) {
 		case 5:
