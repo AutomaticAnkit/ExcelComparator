@@ -29,7 +29,9 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.util.SystemOutLogger;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.bouncycastle.jcajce.provider.symmetric.ARC4.Base;
@@ -83,6 +85,14 @@ public class csvUtils {
 		 
 	 }
 	 
+	 public static String getValFromConfigPropFile(String Key) throws IOException {
+		 FileInputStream fis = new FileInputStream(configPropertyFilePath);
+		 Properties prop = new Properties();
+			prop.load(fis);
+			String value=prop.getProperty(Key);
+			return value;
+		 
+	 }
 	 public static void loadConfigFile() throws IOException {
 		 FileInputStream fis = new FileInputStream(configPropertyFilePath);
 			prop.load(fis);
@@ -541,16 +551,22 @@ System.out.println("Final Data Value : " + finalData);
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
+		
+		 FileInputStream inputStream = new FileInputStream(new File(envP.getProperty("folderPathforInputExcel")+envP.getProperty("inputExcelFileName")+".xlsx"));
+		 Workbook wb = new XSSFWorkbook(inputStream);
+
+
 		String finalExcelFolderPath = envP.getProperty("finalExcelFolderPath");
 		String finalOutputExcelFile = envP.getProperty("finalOutputExcelFile");
+		String end = getDate()+ "_" + getTime();
 		String[] line;
 		int r = 0;// Row increment
 		int noOfTables = Integer.parseInt(prop.getProperty("totalTables"));
 		int rowCount = 1;
-		Workbook wb = new HSSFWorkbook();
+//		Workbook wb = new HSSFWorkbook();
 		CreationHelper helper = wb.getCreationHelper();
-		Sheet sheet = wb.createSheet("new sheet");		
-		HSSFCellStyle style = (HSSFCellStyle) wb.createCellStyle();// Border for Cell
+		Sheet sheet = wb.createSheet("ProdVsUATDataComparison"+end);		
+		XSSFCellStyle style = (XSSFCellStyle) wb.createCellStyle();// Border for Cell
 		style.setBorderLeft(BorderStyle.THIN);
 		style.setBorderRight(BorderStyle.THIN);
 		style.setBorderBottom(BorderStyle.THIN);
@@ -587,7 +603,7 @@ System.out.println("Final Data Value : " + finalData);
 									if(x == csvRowAsStrng.size())
 									{
 										Cell cell = row.createCell(k);
-										cell.setCellStyle(style);
+//										cell.setCellStyle(style);
 										cell.setCellValue(helper.createRichTextString(line[i]));
 										k++;
 										i++;
@@ -601,7 +617,7 @@ System.out.println("Final Data Value : " + finalData);
 									else if(!line[i].equals(splitValue(prop.getProperty("firstColumnHeaderTable"+(x+1)),1)))
 									{
 										Cell cell = row.createCell(k);
-										cell.setCellStyle(style);
+//										cell.setCellStyle(style);
 										cell.setCellValue(helper.createRichTextString(line[i]));
 										k++;
 										i++;
@@ -627,7 +643,7 @@ System.out.println("Final Data Value : " + finalData);
 			}	
 			
 		}
-		String end = getDate()+ "_" + getTime();
+		
 		FileOutputStream fileOut = new FileOutputStream(finalExcelFolderPath + finalOutputExcelFile +end+".xlsx");
 		wb.write(fileOut);
 		fileOut.close();
