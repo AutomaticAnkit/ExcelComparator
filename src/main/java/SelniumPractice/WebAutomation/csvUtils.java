@@ -87,19 +87,32 @@ public class csvUtils {
 	 }
 	 
 	 public static String getValFromConfigPropFile(String Key) throws IOException {
-		 FileInputStream fis = new FileInputStream(configPropertyFilePath);
-		 Properties prop = new Properties();
-			prop.load(fis);
-			String value=prop.getProperty(Key);
-			return value;
+		 try {
+			 FileInputStream fis = new FileInputStream(configPropertyFilePath);
+			 Properties prop = new Properties();
+				prop.load(fis);
+		 }
+		    catch (IOException e) {
+		      System.out.println(e);
+		    }
+				String value=prop.getProperty(Key);
+				return value;
+		    
+		
 		 
 	 }
 	 public static void loadConfigFile() throws IOException {
+		 try {
 		 FileInputStream fis = new FileInputStream(configPropertyFilePath);
 			prop.load(fis);
+	
 			System.out.println("prop :" + prop.getProperty("noOfColumnsInTable1"));
 			FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 			envP.load(envPropfile);
+		 }
+		    catch (IOException e) {
+		      System.out.println(e);
+		    }
 	 }
 
 	 public static void getConfigValue()
@@ -180,13 +193,17 @@ public class csvUtils {
 		}
 	}
 	public static void masterCSVGenrator(String fileName, String fh, String lh, int nc, int nr, int tableNo) throws IOException {
-
+		try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
+		 }
+	    catch (IOException e) {
+	      System.out.println(e);
+	    }
 		log.info("ENV file loaded");
 		test t = new test();
 		String inputExcelFileName = fileName;
@@ -231,9 +248,8 @@ System.out.println("Final Data Value : " + finalData);
 		log.info("CSV created");
 	}
 
-	public static StringBuffer tabletoStringGenrator(String fileName, String firstHeader, String lastHeader,
-			int numberOfCOlumns, int numberOfRows, ArrayList listOfIgnoreCols) throws IOException {
-
+	public static StringBuffer tabletoStringGenrator(String fileName, String firstHeader, String lastHeader,int numberOfCOlumns, int numberOfRows, ArrayList listOfIgnoreCols) throws IOException {
+		
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
@@ -242,6 +258,7 @@ System.out.println("Final Data Value : " + finalData);
 		envP.load(envPropfile);
 		String path = envP.getProperty("folderPathforInputExcel");
 		FileInputStream fileInStream = new FileInputStream(path + fileName + ".xlsx");
+		
 		int rowcount = 1;
 		ArrayList ignoreColNo = new ArrayList();
 		
@@ -256,6 +273,7 @@ System.out.println("Final Data Value : " + finalData);
 		StringBuffer csvLine = new StringBuffer();// String buffer to be written in CSV file
 		int rc = s1.getLastRowNum();// Get last row number
 //		System.out.println("Row count at the top is L : " + rc);
+		
 		for (int i = s1.getFirstRowNum(); i < rc; i++) {
 			if (s1.getRow(i) != null) {
 				int cc = s1.getRow(i).getLastCellNum();
@@ -417,10 +435,10 @@ System.out.println("Final Data Value : " + finalData);
 		}
 //		System.out.println("====================AT the end =========================");
 		return csvLine;
+	
 	}
-
 	public static void csvComparison() throws IOException {
-
+		try {
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
@@ -554,12 +572,15 @@ System.out.println("Final Data Value : " + finalData);
 		int size = al1.size();
 		System.out.println("Number of Values found diff are  " + size);
 		System.out.println(" ");
-
+		} 
+	    catch (IOException e) {
+		      System.out.println(e);
+		    }
 	}
 
 	public static void csvtoExcelCOnverion() throws IOException {
 		// Data from CSV inserted into array
-
+try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
@@ -671,11 +692,15 @@ System.out.println("Final Data Value : " + finalData);
 		
 
 		System.out.println("File Created sucessfully.");
+}catch (IOException e) {
+    System.out.println(e);
+  }
 	}
 	
 
 	
 	public static void valueSetterPropertyFile(String key,String Value) throws IOException {
+		try {
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
@@ -688,11 +713,15 @@ System.out.println("Final Data Value : " + finalData);
 		
 		envP.store(out, null);
 		out.close();
+		}catch (IOException e) {
+		      System.out.println(e);
+		    }
 		
 	}
 	
 	
 	public static void summaryReport(Sheet s2) throws IOException {
+		try {
 		 
 		int r=0;
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
@@ -712,8 +741,9 @@ System.out.println("Final Data Value : " + finalData);
 		w++;
 		}
 		 
-		 
-
+		 	}catch (IOException e) {
+		      System.out.println(e);
+		    }
 		
 	}
 	  
@@ -768,7 +798,9 @@ private static int tableRowCount(int xLoop, int fileNo) throws IOException {
 			tRowCount = table5RowCount;
 		}
 		return tRowCount;
+		
 	}
+		
 	private static int tablecolumnCount(int loopInt, int fileNo) throws IOException {
 		System.out.println("I am in table count method");
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
