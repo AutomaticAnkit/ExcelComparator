@@ -22,6 +22,7 @@ import java.util.TimeZone;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -426,9 +427,12 @@ System.out.println("Final Data Value : " + finalData);
 		String path = envP.getProperty("folderPathforInputExcel");
 		String file1 = envP.getProperty("inputExcelFileName") + "CSV.csv";
 		String file2 = envP.getProperty("inputExcelTemplate") + "CSV.csv";
-		String file3 = "Book4CSV.csv";
+		String file3 = envP.getProperty("inputExcelFileName")+envP.getProperty("inputExcelTemplate")+".csv";
 		ArrayList al1 = new ArrayList();
 		ArrayList al2 = new ArrayList();
+		int counterPass=0;
+		int  counterFail=0;
+		int counterPWV=0;
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
@@ -488,6 +492,7 @@ System.out.println("Final Data Value : " + finalData);
 					writer.append("" + "Pass");
 					writer.append(",");
 					i++;
+					counterPass++;
 				} else {					
 					var=varianceCalculator(tempColCount,i,x);
 					if (envP.getProperty("runWithTol").equalsIgnoreCase("Yes")) 
@@ -501,12 +506,13 @@ System.out.println("Final Data Value : " + finalData);
 						writer.append("" + result);
 						writer.append(",");
 						i++;
+						counterPWV++;
 					} else {
 						System.out.println(al1.get(i) + " != " + al2.get(i));
 						writer.append("" + "Fail");
 						writer.append(",");
-						
 						i++;
+						counterFail++;
 					}
 				}
 				
@@ -530,6 +536,15 @@ System.out.println("Final Data Value : " + finalData);
 
 		writer.flush();
 		writer.close();
+		String passValue=String.valueOf(counterPass); 
+		String failValue=String.valueOf(counterFail);
+		String pWVValue=String.valueOf(counterPWV);
+		valueSetterPropertyFile("summaryRepoValH6", passValue);
+		valueSetterPropertyFile("summaryRepoValH7", failValue);
+		valueSetterPropertyFile("summaryRepoValH8", pWVValue);
+		System.out.println("VALUE OF PASS CASES"+counterPass);
+		System.out.println("VALUE OF Fail CASES"+counterFail);
+		System.out.println("VALUE OF PASS wv CASES"+counterPWV);
 		System.out.println("File Created Successfully.");
 		System.out.println("PLease Check the File on Below Location");
 		System.out.println(path + "\\" + file3);
@@ -574,7 +589,7 @@ System.out.println("Final Data Value : " + finalData);
 		style.setShrinkToFit(true);
 		
 		CSVReaderBuilder reader = new CSVReaderBuilder(
-				new FileReader("C:\\Users\\ankit\\Desktop\\Excel\\Book4CSV.csv"));// CSV file reader
+				new FileReader(envP.getProperty("folderPathforInputExcel")+envP.getProperty("inputExcelFileName")+envP.getProperty("inputExcelTemplate")+".csv"));
 		List<String[]> csvRowAsStrng = reader.build().readAll();	
 		
 		for(int x=1;x<=csvRowAsStrng.size();x++) 
@@ -643,15 +658,64 @@ System.out.println("Final Data Value : " + finalData);
 			}	
 			
 		}
+		Sheet s2 = wb.createSheet("SummaryReport"+end);
+		ExcelcsvComp ExcelcsvComp=new ExcelcsvComp();
 		
+//		System.out.println("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"+ExcelcsvComp.codeRunTime);
+//		valueSetterPropertyFile();
+		summaryReport(s2);
+		 
 		FileOutputStream fileOut = new FileOutputStream(finalExcelFolderPath + finalOutputExcelFile +end+".xlsx");
 		wb.write(fileOut);
 		fileOut.close();
+		
 
 		System.out.println("File Created sucessfully.");
 	}
 	
+
 	
+	public static void valueSetterPropertyFile(String key,String Value) throws IOException {
+		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
+		Properties envP = new Properties();
+		envP.load(envPropfile);
+		envPropfile.close();
+		
+		FileOutputStream out = new FileOutputStream(envPropertyFilePath);
+		envP.setProperty("summaryRepoValH3", getDate());
+		envP.setProperty("summaryRepoValH4", getTime());
+		envP.setProperty(key, Value);
+		
+		envP.store(out, null);
+		out.close();
+		
+	}
+	
+	
+	public static void summaryReport(Sheet s2) throws IOException {
+		 
+		int r=0;
+		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
+		Properties envP = new Properties();
+		envP.load(envPropfile);
+		
+				
+		
+		for(int w=1;w<10;) {
+		 Row row = s2.createRow(w);	
+		 Cell cell = row.createCell(2);		
+		 cell.setCellValue(envP.getProperty("summaryReportH"+w));
+	
+		
+		Cell cell2=row.createCell(3);
+		cell2.setCellValue(rowCSVUtil.getValFromEnvPropFile("summaryRepoValH"+w));
+		w++;
+		}
+		 
+		 
+
+		
+	}
 	  
 	  private  final static String getDate(  )  
 	  {

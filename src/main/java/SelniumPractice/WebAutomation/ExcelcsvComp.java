@@ -10,11 +10,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ExcelcsvComp extends csvUtils{
+	
 	public ExcelcsvComp() throws IOException {
 		
 		super();
 		 
 	}
+	static long startTime = System.currentTimeMillis();
+	
+	
+	
 	public static void main(String[] args) throws Exception  {		
 		//Converts Excel to CSV file as per the parameters provided in Config file		
 //		String configPropertyFilePath = "C:\\Users\\ankit\\git\\repository\\ExcelComparator\\src\\test\\java\\SelniumPractice\\WebAutomation\\config.properties";
@@ -31,14 +36,27 @@ public class ExcelcsvComp extends csvUtils{
 		finalData = new StringBuffer();
 		structureCheck(envP.getProperty("inputExcelTemplate"),2);
 		
+		rowCSVUtil rowCSVUtil= new rowCSVUtil();
+		
 //		masterCSVGenrator(envP.getProperty("inputExcelFileName"));
 //		masterCSVGenrator(envP.getProperty("inputExcelTemplate"));		
 		//Compare Actual and Baseline CSV and Generates a 3rd CSV 
 		csvComparison();
 //		System.out.println("Actual and Baseline CSV comparison completed.\n");
 //		//Converts Back the CSV to Excel
+		long endTime   = System.currentTimeMillis();
+		System.out.println(totalTime(startTime,endTime));
+		valueSetterPropertyFile("summaryRepoValH5",totalTime(startTime,endTime));
 		csvtoExcelCOnverion();
-		System.out.println("csv to Excel conversion completed.\n");		
+		System.out.println("csv to Excel conversion completed.\n");	
+	
+		}
+	
+	public static String totalTime(long startTime,long endTime) {
+		long totalTime=endTime-startTime;
+		long totalRuntime=totalTime/1000;
+		String codeRunTime=String.valueOf(totalRuntime)+" SEC";		
+		return codeRunTime;
 	}
 
 }
