@@ -21,7 +21,10 @@ public class ExcelcsvComp extends csvUtils{
 	
 	
 	
-	public static void main(String[] args) throws Exception  {		
+	public static void main(String[] args) throws Exception  {	
+		try
+		{
+		
 		log.info("started file converstion");
 		//Converts Excel to CSV file as per the parameters provided in Config file		
 //		String configPropertyFilePath = "C:\\Users\\ankit\\git\\repository\\ExcelComparator\\src\\test\\java\\SelniumPractice\\WebAutomation\\config.properties";
@@ -52,6 +55,9 @@ public class ExcelcsvComp extends csvUtils{
 		csvtoExcelCOnverion();
 		System.out.println("csv to Excel conversion completed.\n");	
 	log.info("csv to Excel conversion completed");
+		} catch (Exception e){			 
+			 throw (e);
+			 	 }
 		}
 	
 	public static String totalTime(long startTime,long endTime) {
