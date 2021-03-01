@@ -40,216 +40,131 @@ import org.bouncycastle.jcajce.provider.symmetric.ARC4.Base;
 import com.opencsv.CSVReaderBuilder;
 
 public class csvUtils {
-	
+
 	static String configPropertyFilePath = "C:\\Users\\ankit\\git\\repository\\ExcelComparator\\src\\test\\java\\SelniumPractice\\WebAutomation\\config.properties";
 	static String envPropertyFilePath = "C:\\Users\\ankit\\git\\repository\\ExcelComparator\\src\\test\\java\\SelniumPractice\\WebAutomation\\env.properties";
-	private static Logger log=LogManager.getLogger(csvUtils.class.getName());
+	private static Logger log = LogManager.getLogger(csvUtils.class.getName());
 	boolean result = true;
 	static Properties prop = new Properties();
 	static Properties envP = new Properties();
-	static int prdt1NoOfCols;
-	static int tempt1NoOfCols;
-	static int tempt1NoOfRows;
-	static String tempt1FirstColHeader;
-	static String tempt1LastColHeader;	
-	static int t2NoOfCols;
-	static int prdt1NoOfRows;
-	static int t2NoOfRows;
-	static String prdt1FirstColHeader;
-	static String prdt1LastColHeader;
-	static String t2FirstColHeader;
-	static String t2LastColHeader;
-	static int t3NoOfCols;
-	static int t3NoOfRows;
-	static String t3LastColHeader;
-	static String t3FirstColHeader;
-	static int t4NoOfCols;
-	static int t4NoOfRows;
-	static String t4LastColHeader;
-	static String t4FirstColHeader;
-	static int t5NoOfCols;
-	static int t5NoOfRows;
-	static String t5LastColHeader;
-	static String t5FirstColHeader;
 	static String path;
 	static int noOfTable;
 	static StringBuffer finalData = new StringBuffer();
-
 	
-	
-	 public csvUtils() throws IOException {
-		 System.out.println("---------------------------");
-		 loadConfigFile();
-		 System.out.println("---------------------------))))))))))))))))))))))))");
-		 getConfigValue();
-		 System.out.println("---------------------------************************");
-		 
-	 }
-	 
-	 public static String getValFromConfigPropFile(String Key) throws IOException {
-		 try {
-			 FileInputStream fis = new FileInputStream(configPropertyFilePath);
-			 Properties prop = new Properties();
-				prop.load(fis);
-		 }
-		    catch (IOException e) {
-		      System.out.println(e);
-		    }
-				String value=prop.getProperty(Key);
-				return value;
-		    
-		
-		 
-	 }
-	 public static void loadConfigFile() throws IOException {
-		 try {
-		 FileInputStream fis = new FileInputStream(configPropertyFilePath);
-			prop.load(fis);
-	
-			System.out.println("prop :" + prop.getProperty("noOfColumnsInTable1"));
-			FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
-			envP.load(envPropfile);
-		 }
-		    catch (IOException e) {
-		      System.out.println(e);
-		    }
-	 }
-
-	 public static void getConfigValue()
-	 {	
-		prdt1NoOfCols = Integer.parseInt(splitValue(prop.getProperty("noOfColumnsInTable1"),1));
-		tempt1NoOfCols=Integer.parseInt(splitValue(prop.getProperty("noOfColumnsInTable1"),2));
-//		t2NoOfCols = Integer.parseInt(prop.getProperty("noOfColumnsInTable2"));
-		prdt1NoOfRows = Integer.parseInt(splitValue(prop.getProperty("noOfRowsInTable1"),1));
-		tempt1NoOfRows = Integer.parseInt(splitValue(prop.getProperty("noOfRowsInTable1"),2));
-		
-//		t2NoOfRows = Integer.parseInt(prop.getProperty("noOfRowsInTable2"));
-		prdt1FirstColHeader = splitValue(prop.getProperty("firstColumnHeaderTable1"),1);
-		prdt1LastColHeader = splitValue(prop.getProperty("LastColumnHeaderTable1"),1);
-		tempt1FirstColHeader = splitValue(prop.getProperty("firstColumnHeaderTable1"),2);
-		tempt1LastColHeader = splitValue(prop.getProperty("LastColumnHeaderTable1"),2);
-//		t2FirstColHeader = prop.getProperty("firstColumnHeaderTable2");
-//		t2LastColHeader = prop.getProperty("LastColumnHeaderTable2");
-//		t3NoOfCols = Integer.parseInt(prop.getProperty("noOfColumnsInTable3"));
-//		t3NoOfRows = Integer.parseInt(prop.getProperty("noOfRowsInTable3"));
-//		t3LastColHeader = prop.getProperty("LastColumnHeaderTable3");
-//		t3FirstColHeader = prop.getProperty("firstColumnHeaderTable3");
-//		t4NoOfCols = Integer.parseInt(prop.getProperty("noOfColumnsInTable4"));
-//		t4NoOfRows = Integer.parseInt(prop.getProperty("noOfRowsInTable4"));
-//		t4LastColHeader = prop.getProperty("LastColumnHeaderTable4");
-//		t4FirstColHeader = prop.getProperty("firstColumnHeaderTable4");
-//		t5NoOfCols = Integer.parseInt(prop.getProperty("noOfColumnsInTable5"));
-//		t5NoOfRows = Integer.parseInt(prop.getProperty("noOfRowsInTable5"));
-//		t5LastColHeader = prop.getProperty("LastColumnHeaderTable5");
-//		t5FirstColHeader = prop.getProperty("firstColumnHeaderTable5");
-		path = envP.getProperty("folderPathforInputExcel");
-		noOfTable = Integer.parseInt(prop.getProperty("totalTables"));
-	 }
-	 
-	 private static String splitValue(String proName,int fileNo)
-	 {
-		 String result = null;
-		 if(fileNo == 1)
-		 {
-			 result = (proName.split(","))[0];
-		 }
-		 else if(fileNo == 2)
-		 {
-			 result = (proName.split(","))[1];
-		 }
-		 return result;
-	 }
-	
-	public static void structureCheck(String fileName, int fileNo) throws IOException {
-		for(int i=1;i<=noOfTable;i++) {
-			
-			System.out.println("i am in struture check ");
-				
-					String[] fColumn = (prop.getProperty("firstColumnHeaderTable"+i)).split(",");
-					String[] lColumn = (prop.getProperty("LastColumnHeaderTable"+i)).split(",");
-					String[] rowCount = (prop.getProperty("noOfRowsInTable"+i)).split(",");
-					String[] colCount = (prop.getProperty("noOfColumnsInTable"+i)).split(",");
-							
-					if(fileNo == 1)
-					{System.out.println("File One :"+fileNo);
-						masterCSVGenrator( fileName,fColumn[0],lColumn[0],
-								Integer.parseInt(colCount[0]),Integer.parseInt(rowCount[0]),i);
-						
-						System.out.println("fColumn[0],lColumn[0],Integer.parseInt(colCount[0]),Integer.parseInt(rowCount[0])"+fColumn[0]+lColumn[0]+
-								Integer.parseInt(colCount[0])+Integer.parseInt(rowCount[0]));
-					}
-					else
-					{System.out.println("File two :"+fileNo);
-					System.out.println("fColumn[1],lColumn[1],Integer.parseInt(colCount[1]),Integer.parseInt(rowCount[1])"+fColumn[1]+lColumn[1]+
-							Integer.parseInt(colCount[1])+Integer.parseInt(rowCount[1]));
-						masterCSVGenrator( fileName,fColumn[1],lColumn[1],
-								Integer.parseInt(colCount[1]),Integer.parseInt(rowCount[1]),i);
-						
-					}
-					
-					
-				
-					
-		}
-	}
-	public static void masterCSVGenrator(String fileName, String fh, String lh, int nc, int nr, int tableNo) throws IOException {
-		try {
+	public static void propertyFileLoader() throws IOException {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
-		 }
-	    catch (IOException e) {
-	      System.out.println(e);
-	    }
-		log.info("ENV file loaded");
-		test t = new test();
-		String inputExcelFileName = fileName;
-		System.out.println("fileName:" + fileName);
-		StringBuffer table1 = tabletoStringGenrator(fileName, fh, lh, nc,nr,t.headerCompare(fileName,nc,fh,lh,tableNo));
-		System.out.println("PFB, the table data from table.");
-		System.out.println(table1 + "\n");
-		
-		/*
-		 * 
-		 * StringBuffer table2 = tabletoStringGenrator(fileName, fh, lh, nc,
-		 * nr,t.headerCompare(nc,fh,lh));
-		 * System.out.println("PFB, the table data from table 2.");
-		 * System.out.println(table2 + "\n");
-		 */
-//
-//		StringBuffer table3 = tabletoStringGenrator(inputExcelFileName, t3FirstColHeader, t3LastColHeader, t3NoOfCols,
-//				t3NoOfRows);
-//		System.out.println("PFB, the table data from table 3.");
-//		System.out.println(table3 + "\n");
-//		
-//		StringBuffer table4 = tabletoStringGenrator(inputExcelFileName, t4FirstColHeader, t4LastColHeader, t4NoOfCols,
-//				t4NoOfRows);
-//		System.out.println("PFB, the table data from table 4.");
-//		System.out.println(table4 + "\n");
-//		
-//		StringBuffer table5 = tabletoStringGenrator(inputExcelFileName, t5FirstColHeader, t5LastColHeader, t5NoOfCols,
-//				t5NoOfRows);
-//		System.out.println("PFB, the table data from table 5.");
-//		System.out.println(table5 + "\n");
-
-
-System.out.println("Final Data Value : " + finalData);
-		finalData = finalData.append(table1);
-//				.append(table3).append(table4).append(table5);
-		System.out.println(finalData);
-		System.out.println("CSV File generated on the Below Location : - ");
-		System.out.println(path + inputExcelFileName + "\n");
-		FileOutputStream fileOut = new FileOutputStream(path + inputExcelFileName + "CSV.csv");
-		fileOut.write(finalData.toString().getBytes());
-		fileOut.close();
-		log.info("CSV created");
 	}
 
-	public static StringBuffer tabletoStringGenrator(String fileName, String firstHeader, String lastHeader,int numberOfCOlumns, int numberOfRows, ArrayList listOfIgnoreCols) throws IOException {
-		
+	public csvUtils() throws IOException {
+		loadConfigFile();
+		getConfigValue();
+	}
+
+	public static String getValFromConfigPropFile(String Key) throws IOException {
+		FileInputStream fis = new FileInputStream(configPropertyFilePath);
+		Properties prop = new Properties();
+		prop.load(fis);
+		String value = prop.getProperty(Key);
+		return value;
+	}
+
+	public static String getValFromEnvPropFile(String Key) throws IOException {
+		FileInputStream fis = new FileInputStream(envPropertyFilePath);
+		Properties envP = new Properties();
+		envP.load(fis);
+		String value = envP.getProperty(Key);
+		return value;
+	}
+	public static void loadConfigFile() throws IOException {
+		FileInputStream fis = new FileInputStream(configPropertyFilePath);
+		prop.load(fis);
+		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
+		envP.load(envPropfile);
+	}
+
+	public static void getConfigValue() {
+		path = envP.getProperty("folderPathforInputExcel");
+		noOfTable = Integer.parseInt(prop.getProperty("totalTables"));
+	}
+
+	private static String splitValue(String proName, int fileNo) {
+		String result = null;
+		if (fileNo == 1) {
+			result = (proName.split(","))[0];
+		} else if (fileNo == 2) {
+			result = (proName.split(","))[1];
+		}
+		return result;
+	}
+	//This method is used for checking the structure of the table.
+	public static void structureCheck(String fileName, int fileNo) throws IOException {
+		//Config Property file loaded
+		FileInputStream fis = new FileInputStream(configPropertyFilePath);
+		Properties prop = new Properties();
+		prop.load(fis);
+		log.info("Config File Loaded");
+		//Env Property file loaded
+		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
+		Properties envP = new Properties();
+		envP.load(envPropfile);
+		System.out.println(fileName);
+		//For loop iterating on no of tables
+		for (int i = 1; i <= Integer.parseInt(prop.getProperty("totalTables")); i++) {
+			//fColumn array is getting Prod and template value and getting split.
+			String[] fColumn = (prop.getProperty("firstColumnHeaderTable" + i)).split(",");			
+			String[] lColumn = (prop.getProperty("LastColumnHeaderTable" + i)).split(",");
+			String[] rowCount = (prop.getProperty("noOfRowsInTable" + i)).split(",");
+			String[] colCount = (prop.getProperty("noOfColumnsInTable" + i)).split(",");
+			//File no is 1 for prod and 2 for template
+			if (fileNo == 1) 
+			{
+				//Below Method generates on the basis of first column header and Last column header.
+				masterCSVGenrator(fileName, fColumn[0], lColumn[0], Integer.parseInt(colCount[0]),
+						Integer.parseInt(rowCount[0]), i);
+			} else {
+				masterCSVGenrator(fileName, fColumn[1], lColumn[1], Integer.parseInt(colCount[1]),
+						Integer.parseInt(rowCount[1]), i);
+			}
+		}
+	}
+
+	//This method  generates the CSV for the Excel on the basis of first header last header , No of column and no of rows.
+	public static void masterCSVGenrator(String fileName, String fh, String lh, int nc, int nr, int tableNo)
+			throws IOException {
+		FileInputStream fis = new FileInputStream(configPropertyFilePath);
+		Properties prop = new Properties();
+		prop.load(fis);
+		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
+		Properties envP = new Properties();
+		envP.load(envPropfile);
+		missingValueExtractor missingValue = new missingValueExtractor();
+		String inputExcelFileName = fileName;
+		//String buffer table 1 gets the values of table appended by ","
+		StringBuffer table1 = tabletoStringGenrator(fileName, fh, lh, nc, nr,
+				missingValue.headerCompare(fileName, nc, fh, lh, tableNo));
+		System.out.println("PFB, the table data from table.");
+		System.out.println(table1 + "\n");
+		System.out.println("Final Data Value : " + finalData);
+		finalData = finalData.append(table1);
+		System.out.println(finalData);
+		System.out.println("CSV File generated on the Below Location : - ");
+		System.out.println(envP.getProperty("folderPathforInputExcel") + inputExcelFileName + "\n");
+		//Closing the CSV file Created 
+		FileOutputStream fileOut = new FileOutputStream( envP.getProperty("folderPathforInputExcel") + inputExcelFileName + "CSV.csv");
+		fileOut.write(finalData.toString().getBytes());
+		fileOut.close();
+	}
+
+	//This method genrates the table data to a string array on the basis of First , last and no of rows& columns.
+	public static StringBuffer tabletoStringGenrator(String fileName, String firstHeader, String lastHeader,
+			int numberOfCOlumns, int numberOfRows, ArrayList listOfIgnoreCols) throws IOException {
+		//listOfIgnoreCols contains the values are that needs to be ignored while CSV generation.
+		//Values which are not present in prod and present in template will be ignored.
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
@@ -258,206 +173,169 @@ System.out.println("Final Data Value : " + finalData);
 		envP.load(envPropfile);
 		String path = envP.getProperty("folderPathforInputExcel");
 		FileInputStream fileInStream = new FileInputStream(path + fileName + ".xlsx");
-		
 		int rowcount = 1;
 		ArrayList ignoreColNo = new ArrayList();
-		
-		XSSFWorkbook workBook = new XSSFWorkbook(fileInStream);// Open the xlsx and get the requested sheet from the
-												System.out.println("list recived"+listOfIgnoreCols);
-												System.out.println("firstHeader"+firstHeader);
-												System.out.println("lastHeader"+lastHeader);
-												System.out.println("numberOfCOlumns"+numberOfCOlumns);
-												System.out.println("numberOfRows"+numberOfRows);
-												// workbook
+		XSSFWorkbook workBook = new XSSFWorkbook(fileInStream);// Open the xlsx and get the requested sheet from the workbook
 		XSSFSheet s1 = workBook.getSheetAt(0);// Get Sheet from WorkBook
 		StringBuffer csvLine = new StringBuffer();// String buffer to be written in CSV file
 		int rc = s1.getLastRowNum();// Get last row number
-//		System.out.println("Row count at the top is L : " + rc);
-		
+		//iterating on the rows
 		for (int i = s1.getFirstRowNum(); i < rc; i++) {
+			//checking if the row is null
 			if (s1.getRow(i) != null) {
+				//getting the last cell number of the row 
 				int cc = s1.getRow(i).getLastCellNum();
+				//iterating over the cells
 				for (int j = 0; j < cc; j++) {
-					System.out.println("Row count at the top is L : " + rc);
-					
-					
-					
+					//checking if the cell is null 
 					if (s1.getRow(i).getCell(j) != null) {
-//						System.out.println("showing ignore values"+listOfIgnoreCols.contains((s1.getRow(i).getCell(j).getStringCellValue())));
-						System.out.println("below if s1.getRow(i).getCell(j)"+s1.getRow(i).getCell(j));
-						
-						System.out.println("numberOfCOlumns ; "+numberOfCOlumns);
-						System.out.println("j value"+j);
-						
+						//temp variable to catch the value of I on which the filled Cell is found
 						int temp = j;
-						System.out.println("(s1.getRow(i).getCell(j + (numberOfCOlumns - 1))) : " + (s1.getRow(i).getCell(j + (numberOfCOlumns - 1))));
+						//checking if the first header index and last header index is null
 						if ((s1.getRow(i).getCell(j)) != null
-								&& (s1.getRow(i).getCell(j + (numberOfCOlumns - 1))) != null) 
-						{	
-							System.out.println("below null condition");
-							if(s1.getRow(i).getCell(j).getCellType()==s1.getRow(i).getCell(j).getCellType().NUMERIC) {
-								System.out.println("below numeric  condition");
-							}else
-							{
-								
-									System.out.println("J value :"  + s1.getRow(i).getCell(j));
-									System.out.println("firstHeader:" + firstHeader);
-	
-									System.out.println("lastHeader:" + lastHeader);
-									
-									if ((s1.getRow(i).getCell(j).getCellType() == s1.getRow(i).getCell(j).getCellType().NUMERIC)
-											|| (s1.getRow(i).getCell(j + (numberOfCOlumns - 1)).getCellType() == s1.getRow(i)
-													.getCell(j + (numberOfCOlumns - 1)).getCellType().NUMERIC)) 
-									{
-		
-									}
-									else if (((s1.getRow(i).getCell(j).getStringCellValue()).equals(firstHeader))
-											&& ((s1.getRow(i).getCell(j + (numberOfCOlumns - 1)).getStringCellValue())
-													.equals(lastHeader))) {
-		//								System.out.println("I am here:");
-										
-										for (int k = 0; k < numberOfCOlumns;) {
-											Cell c1 = s1.getRow(i).getCell(j);
-											
-											if (c1 != null && !(ignoreColNo.contains(k))) {
-												System.out.println("list of ignore list111 : " + listOfIgnoreCols.size());
-												
-												switch (c1.getCellType()) {
-												case STRING:
-													System.out.println("I am inside of String block ");
-													if(!(listOfIgnoreCols.contains((s1.getRow(i).getCell(j).getStringCellValue()))))
-													{
-														if(listOfIgnoreCols.size() > 0 && (listOfIgnoreCols.contains((s1.getRow(i).getCell(j).getStringCellValue()))))
-														{
-															
-															if(k==0)
-																ignoreColNo.add(200);
-															else if(k==1)
-																ignoreColNo.add(300);
-															else if(k==2)
-																ignoreColNo.add(400);
-															else if(k==3)
-																ignoreColNo.add(500);
-															else if(k==4)
-																ignoreColNo.add(600);
-															
-														}
-														csvLine.append(c1.getStringCellValue() + ",");
-													}
-													else
-													{
-														if(listOfIgnoreCols.size() > 0)
-														{
-															listOfIgnoreCols.remove((s1.getRow(i).getCell(j).getStringCellValue()));
-															if(k==0)
-																ignoreColNo.add(200);
-															else if(k==1)
-																ignoreColNo.add(300);
-															else if(k==2)
-																ignoreColNo.add(400);
-															else if(k==3)
-																ignoreColNo.add(500);
-															else if(k==4)
-																ignoreColNo.add(600);
-														}
-													}
-													break;
-												case NUMERIC:
-													System.out.println("ignoreColNo: " + ignoreColNo);
-													if(k==0 && !ignoreColNo.contains(200))
-													{
-														System.out.println("c1.getNumericCellValue() : " + c1.getNumericCellValue());
-														csvLine.append(c1.getNumericCellValue() + ",");
+								&& (s1.getRow(i).getCell(j + (numberOfCOlumns - 1))) != null) {
+							//Checking first header and last header is numeric 
+							if (s1.getRow(i).getCell(j)
+									.getCellType() == s1.getRow(i).getCell(j).getCellType().NUMERIC) {
+							} else {
+								//checking the cell type is numeric 
+								if ((s1.getRow(i).getCell(j)
+										.getCellType() == s1.getRow(i).getCell(j).getCellType().NUMERIC)
+										|| (s1.getRow(i).getCell(j + (numberOfCOlumns - 1)).getCellType() == s1
+												.getRow(i).getCell(j + (numberOfCOlumns - 1)).getCellType().NUMERIC)) {
+
+								}
+								//checking if the A1 and A5 are found 
+								else if (((s1.getRow(i).getCell(j).getStringCellValue()).equals(firstHeader))
+										&& ((s1.getRow(i).getCell(j + (numberOfCOlumns - 1)).getStringCellValue())
+												.equals(lastHeader))) {
+									//if A1 and A5 are found then headers will be will be appended
+									for (int k = 0; k < numberOfCOlumns;) {
+										Cell c1 = s1.getRow(i).getCell(j);
+										// checking if the cell is null and contains k
+										if (c1 != null && !(ignoreColNo.contains(k))) {
+											//Checking the Cell Type
+											switch (c1.getCellType()) {
+											case STRING:
+												//Checking if the headers are not present in the ignored list are present in the cell
+												if (!(listOfIgnoreCols
+														.contains((s1.getRow(i).getCell(j).getStringCellValue())))) {
+													//checking if the headers to be ignored is more than 0 and the header present in the ignored list and the header in the cell is equal
+													if (listOfIgnoreCols.size() > 0 && (listOfIgnoreCols.contains(
+															(s1.getRow(i).getCell(j).getStringCellValue())))) {
 														
+														if (k == 0)
+															ignoreColNo.add(200);
+														else if (k == 1)
+															ignoreColNo.add(300);
+														else if (k == 2)
+															ignoreColNo.add(400);
+														else if (k == 3)
+															ignoreColNo.add(500);
+														else if (k == 4)
+															ignoreColNo.add(600);
+
 													}
-													else if(k==1 && !ignoreColNo.contains(300))
-													{
-														System.out.println("c1.getNumericCellValue() : " + c1.getNumericCellValue());
-														csvLine.append(c1.getNumericCellValue() + ",");
-														
+													//Appending of string value if the value is not available in the ignired list
+													csvLine.append(c1.getStringCellValue() + ",");
+												} else {
+													if (listOfIgnoreCols.size() > 0) {
+														listOfIgnoreCols
+																.remove((s1.getRow(i).getCell(j).getStringCellValue()));
+														if (k == 0)
+															ignoreColNo.add(200);
+														else if (k == 1)
+															ignoreColNo.add(300);
+														else if (k == 2)
+															ignoreColNo.add(400);
+														else if (k == 3)
+															ignoreColNo.add(500);
+														else if (k == 4)
+															ignoreColNo.add(600);
 													}
-													else if(k==2 && !ignoreColNo.contains(400))
-													{
-														System.out.println("c1.getNumericCellValue() : " + c1.getNumericCellValue());
-														csvLine.append(c1.getNumericCellValue() + ",");
-														
-													}
-													else if(k==3 && !ignoreColNo.contains(500))
-													{
-														System.out.println("c1.getNumericCellValue() : " + c1.getNumericCellValue());
-														csvLine.append(c1.getNumericCellValue() + ",");
-														
-													}
-													else if(k==4 && !ignoreColNo.contains(600))
-													{
-														System.out.println("c1.getNumericCellValue() : " + c1.getNumericCellValue());
-														csvLine.append(c1.getNumericCellValue() + ",");
-														
-													}
-													/*
-													 * else { System.out.println("For checking"); ignoreColNo = 100; }
-													 */
-													break;
-												case BOOLEAN:
-													csvLine.append(c1.getBooleanCellValue() + ",");
-													break;
-												case _NONE:
-													break;
-		
-												case BLANK:
-													break;
-		
-												default:
-													break;
 												}
+												break;
+											case NUMERIC:
+												//Control coming to Numeric if the cell type is numeric
+												if (k == 0 && !ignoreColNo.contains(200)) {
+													csvLine.append(c1.getNumericCellValue() + ",");
+												} else if (k == 1 && !ignoreColNo.contains(300)) {
+													csvLine.append(c1.getNumericCellValue() + ",");
+												} else if (k == 2 && !ignoreColNo.contains(400)) {
+													csvLine.append(c1.getNumericCellValue() + ",");
+												} else if (k == 3 && !ignoreColNo.contains(500)) {
+													csvLine.append(c1.getNumericCellValue() + ",");
+												} else if (k == 4 && !ignoreColNo.contains(600)) {
+													csvLine.append(c1.getNumericCellValue() + ",");
+												}
+												break;
+											case BOOLEAN:
+												csvLine.append(c1.getBooleanCellValue() + ",");
+												break;
+											case _NONE:
+												break;
+
+											case BLANK:
+												break;
+
+											default:
+												break;
 											}
-											else {
-												System.out.println("is the condition met");
-											}
-											k++;
-											j++;
-											if (k % numberOfCOlumns == 0 && rowcount != numberOfRows) {
-												rowcount++;
-												k = 0;
-												j = temp;
-												i++;
-											}
+										} else {
+											
 										}
-										break;
+										k++;
+										j++;
+										if (k % numberOfCOlumns == 0 && rowcount != numberOfRows) {
+											rowcount++;
+											k = 0;
+											j = temp;
+											i++;
+										}
 									}
-								
-								
+									break;
+								}
+
 							}
 						}
 					}
 				}
 			}
 		}
-//		System.out.println("====================AT the end =========================");
+		//returns the csvline as string array
 		return csvLine;
-	
 	}
+
+	//This method compares the PROD and UAT CSV generated in structure check method
 	public static void csvComparison() throws IOException {
-		try {
+
+		FileInputStream fis = new FileInputStream(configPropertyFilePath);
+		Properties prop = new Properties();
+		prop.load(fis);
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
 		String path = envP.getProperty("folderPathforInputExcel");
 		String file1 = envP.getProperty("inputExcelFileName") + "CSV.csv";
 		String file2 = envP.getProperty("inputExcelTemplate") + "CSV.csv";
-		String file3 = envP.getProperty("inputExcelFileName")+envP.getProperty("inputExcelTemplate")+".csv";
+		String file3 = envP.getProperty("inputExcelFileName") + envP.getProperty("inputExcelTemplate") + ".csv";
 		ArrayList al1 = new ArrayList();
 		ArrayList al2 = new ArrayList();
-		int counterPass=0;
-		int  counterFail=0;
-		int counterPWV=0;
-		FileInputStream fis = new FileInputStream(configPropertyFilePath);
-		Properties prop = new Properties();
-		prop.load(fis);
-		int noOfTables=Integer.parseInt(prop.getProperty("totalTables"));
+		//Counter to get all the Pass Values
+		int counterPass = 0;
+		//Counter to get all the Fail Values
+		int counterFail = 0;
+		//Counter to get Pass with Variance Values
+		int counterPWV = 0;
+		//Numbe of Tables
+		int noOfTables = Integer.parseInt(prop.getProperty("totalTables"));
+		//File Writer to write 3rd CSV file after Comparison
 		FileWriter writer = new FileWriter(path + file3);
+		//Buffer reader to take all the data of CSV file 
 		BufferedReader CSVFile1 = new BufferedReader(new FileReader(path + file1));
+		//data row 1 to capture the Line in CSV
 		String dataRow1 = CSVFile1.readLine();
+		//All the data from PROD CSV is inserted into al1 list for Comparison
 		while (dataRow1 != null) {
 			String[] dataArray1 = dataRow1.split(",");
 			for (String item1 : dataArray1) {
@@ -466,9 +344,11 @@ System.out.println("Final Data Value : " + finalData);
 			dataRow1 = CSVFile1.readLine(); // Read next line of data.
 		}
 		CSVFile1.close();
-
+		//All the data from Template CSV is inserted into al2 list for Comparison
 		BufferedReader CSVFile2 = new BufferedReader(new FileReader(path + file2));
+		//Capturring the linein String from CSV 2
 		String dataRow2 = CSVFile2.readLine();
+		//Using While loop to chek the next values in null or not and then putting them into list
 		while (dataRow2 != null) {
 			String[] dataArray2 = dataRow2.split(",");
 			for (String item2 : dataArray2) {
@@ -478,354 +358,304 @@ System.out.println("Final Data Value : " + finalData);
 		}
 		CSVFile2.close();
 		boolean tableFlag = false;
-		
 		double var = 0;
-		System.out.println("size of ist" + al1.size());
+		//Looping on the first list 
 		for (int i = 0; i < al1.size();) {
-			for (int x = 1; x <= noOfTables;) {				
-				int tempColCount=tablecolumnCount(x,1);
+			//Looping on the number of tables 
+			for (int x = 1; x <= noOfTables;) {
+				//tempcount get the column count on the basis of table 
+				int tempColCount = tablecolumnCount(x, 1);
+				//Y is the temp variable to add into column count on line no 374
 				int y = i;
-				System.out.println("Value of x : " + x);
-				System.out.println("tempColCount: " + tempColCount);
-				System.out.println("XXXXXXXXXXXXXXXXXXXXXXX"+splitValue((prop.getProperty("firstColumnHeaderTable" + x)),1));
-				System.out.println("yyy"+al1.get(i));
-				//System.out.println("uu"+al1.get(i + tempColCount - 1));
-				if ((al1.get(i).equals(splitValue(prop.getProperty("firstColumnHeaderTable" + x),1))
-						&& al1.get(i + tempColCount - 1).equals(splitValue(prop.getProperty("LastColumnHeaderTable" + x),1)))) 
-				
-				System.out.println("99999999999"+splitValue(prop.getProperty("firstColumnHeaderTable"+x),1) +"=="+al1.get(i));
-//				System.out.println("100000000000"+splitValue(prop.getProperty("LastColumnHeaderTable" + x),1)+"=="+ al1.get(i + tempColCount - 1));
-				if ((al1.get(i).equals(splitValue(prop.getProperty("firstColumnHeaderTable"+x),1))
-						&& al1.get(i + tempColCount - 1).equals(splitValue(prop.getProperty("LastColumnHeaderTable" + x),1))))
-				{
-					System.out.println("i am in A2 A5 condition");
+				//Below if and else is responsible for writing Header and Compare the table values.
+				if ((al1.get(i).equals(splitValue(prop.getProperty("firstColumnHeaderTable" + x), 1))
+						&& al1.get(i + tempColCount - 1)
+								.equals(splitValue(prop.getProperty("LastColumnHeaderTable" + x), 1)))) {
+					//This for loop is to print header of the table columns
 					for (int k = i; k < tempColCount + y;) {
 						writer.append("" + al1.get(k));
 						writer.append(",");
 						k++;
 						i++;
 					}
-				} else if (al1.get(i).equals(al2.get(i))) {
-					System.out.println(al1.get(i) + " == " + al2.get(i));
+				} 
+				//This is to compare the elements of table apart from Table Headers
+				else if (al1.get(i).equals(al2.get(i))) {
+					//Pass will be written in the comparison file for the same values for table 
 					writer.append("" + "Pass");
 					writer.append(",");
 					i++;
 					counterPass++;
-				} else {					
-					var=varianceCalculator(tempColCount,i,x);
-					if (envP.getProperty("runWithTol").equalsIgnoreCase("Yes")) 
-					{
-						System.out.println("al1.get(i)"+al1);
-						System.out.println("al2.get(i)"+al2);
-						System.out.println("i va;lue"+i);
+				} else {
+					//Variance Calculater is used to return the variance value as per the column of the table 
+					var = varianceCalculator(tempColCount, i, x);
+					//Comparison is done with the tolerance value on the Yes flag
+					if (envP.getProperty("runWithTol").equalsIgnoreCase("Yes")) {
 						double itemList1 = Double.parseDouble((String) al1.get(i));
 						double itemList2 = Double.parseDouble((String) al2.get(i));
 						String result = calculateWRTVariance(itemList1, itemList2, var);
+						//writer writes the result and result contains the pass with variance --variance value also 
 						writer.append("" + result);
 						writer.append(",");
 						i++;
 						counterPWV++;
-					} else {
-						System.out.println(al1.get(i) + " != " + al2.get(i));
+					} else {	
+						//Write writes the fail for the values which do not match
 						writer.append("" + "Fail");
 						writer.append(",");
 						i++;
 						counterFail++;
 					}
 				}
-				
-				if (i < al1.size() && x < noOfTables) 
-				{
-					System.out.println("Value of I :" + i);
-					System.out.println("Value of x :" + x);
-					
-					System.out.println("(prop.getProperty(\"firstColumnHeaderTable\" + (x + 1)): " + (prop.getProperty("firstColumnHeaderTable" + (x + 1))));
-					if (al1.get(i).equals(splitValue(prop.getProperty("firstColumnHeaderTable" + (x + 1)),1))) {
+				//this condition is used to insert the table data in new line every time
+				if (i < al1.size() && x < noOfTables) {
+					if (al1.get(i).equals(splitValue(prop.getProperty("firstColumnHeaderTable" + (x + 1)), 1))) {
 						writer.append("\n");
 						x++;
-						System.out.println("££££££"+ al1.size());
 					}
-				} else 
-				{
+				} else {
 					break;
 				}
 			}
 		}
-
+		//writer closes the csv sheet
 		writer.flush();
 		writer.close();
-		String passValue=String.valueOf(counterPass); 
-		String failValue=String.valueOf(counterFail);
-		String pWVValue=String.valueOf(counterPWV);
+		//Value of total Pass Values in the CSV
+		String passValue = String.valueOf(counterPass);
+		//Value of Total Fail Values in CSV
+		String failValue = String.valueOf(counterFail);
+		//Value of total Values pass with variance 
+		String pWVValue = String.valueOf(counterPWV);
 		valueSetterPropertyFile("summaryRepoValH6", passValue);
 		valueSetterPropertyFile("summaryRepoValH7", failValue);
 		valueSetterPropertyFile("summaryRepoValH8", pWVValue);
-		System.out.println("VALUE OF PASS CASES"+counterPass);
-		System.out.println("VALUE OF Fail CASES"+counterFail);
-		System.out.println("VALUE OF PASS wv CASES"+counterPWV);
 		System.out.println("File Created Successfully.");
 		System.out.println("PLease Check the File on Below Location");
 		System.out.println(path + "\\" + file3);
+		//This is just to return the values which are differnt 
 		for (Object bs : al2) {
 			al1.remove(bs);
 		}
 		int size = al1.size();
 		System.out.println("Number of Values found diff are  " + size);
 		System.out.println(" ");
-		} 
-	    catch (IOException e) {
-		      System.out.println(e);
-		    }
-	}
 
+	}
+	
+	//This method is used for csv to Excel Converion and genrate the Final Excel with results
 	public static void csvtoExcelCOnverion() throws IOException {
 		// Data from CSV inserted into array
-try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
-		
-		 FileInputStream inputStream = new FileInputStream(new File(envP.getProperty("folderPathforInputExcel")+envP.getProperty("inputExcelFileName")+".xlsx"));
-		 Workbook wb = new XSSFWorkbook(inputStream);
-
-
+		//Picks up the Final CSV Generated in the CSV comparison table 
+		FileInputStream inputStream = new FileInputStream(new File(
+				envP.getProperty("folderPathforInputExcel") + envP.getProperty("inputExcelFileName") + ".xlsx"));
+		//Created the WorkBook object and passed the file 
+		Workbook wb = new XSSFWorkbook(inputStream);
 		String finalExcelFolderPath = envP.getProperty("finalExcelFolderPath");
 		String finalOutputExcelFile = envP.getProperty("finalOutputExcelFile");
-		String end = getDate()+ "_" + getTime();
+		//Variable to add current date and time in the end of the comparison report
+		String end = getDate() + "_" + getTime();
+		//String array to take each line from the csv
 		String[] line;
 		int r = 0;// Row increment
+		//No of tables to work 
 		int noOfTables = Integer.parseInt(prop.getProperty("totalTables"));
+		//rowCount Variable to control the wrier on row level
 		int rowCount = 1;
-//		Workbook wb = new HSSFWorkbook();
 		CreationHelper helper = wb.getCreationHelper();
-		Sheet sheet = wb.createSheet("ProdVsUATDataComparison"+end);		
+		//Creating a new sheet to present the results in the excel sheet on the prod sheet provided as input.
+		Sheet sheet = wb.createSheet("ProdVsUATDataComparison" + end);
+		//Below Method is used for Highlighting the Border of the cell
 		XSSFCellStyle style = (XSSFCellStyle) wb.createCellStyle();// Border for Cell
+		//Border styling for Cell
 		style.setBorderLeft(BorderStyle.THIN);
 		style.setBorderRight(BorderStyle.THIN);
 		style.setBorderBottom(BorderStyle.THIN);
 		style.setBorderTop(BorderStyle.THIN);
 		style.setShrinkToFit(true);
-		
-		CSVReaderBuilder reader = new CSVReaderBuilder(
-				new FileReader(envP.getProperty("folderPathforInputExcel")+envP.getProperty("inputExcelFileName")+envP.getProperty("inputExcelTemplate")+".csv"));
-		List<String[]> csvRowAsStrng = reader.build().readAll();	
-		
-		for(int x=1;x<=csvRowAsStrng.size();x++) 
-		{
-			System.out.println("Value of X :" + x);
-			System.out.println("csvRowAsStrng: " + csvRowAsStrng.size());
-			
-			line = csvRowAsStrng.get(x-1);
-			System.out.println("(line.length : " + (line.length));
+		//CSV reader to read the CSV 
+		CSVReaderBuilder reader = new CSVReaderBuilder(new FileReader(envP.getProperty("folderPathforInputExcel")
+				+ envP.getProperty("inputExcelFileName") + envP.getProperty("inputExcelTemplate") + ".csv"));
+		//Putting all the lines in the List of String Arrayy
+		List<String[]> csvRowAsStrng = reader.build().readAll();
+		//Iterating over the List of Array
+		for (int x = 1; x <= csvRowAsStrng.size(); x++) {
+			//Cause list starts from zero
+			line = csvRowAsStrng.get(x - 1);
+			//Creating new row
 			Row row = sheet.createRow((short) r++);
-			for (int i = 0; i < (line.length-1);) 
-			{	
-					row = sheet.createRow((short) r++);	
-					if(i < (line.length-1))
-					{
-						rowCount = 1;
-						int tmpColCount = tablecolumnCount(x,1);
-						int tmpRowCount = tableRowCount(x,1);						
-							if (line[i].equals(splitValue(prop.getProperty("firstColumnHeaderTable"+x),1))
-								&& line[i + (tmpColCount - 1)].equals(splitValue(prop.getProperty("LastColumnHeaderTable"+x),1)))
-							{	
-								row = sheet.createRow((short) r++);
-								
-								for (int k = 0; k < tmpColCount;) 
-								{
-									if(x == csvRowAsStrng.size())
-									{
-										Cell cell = row.createCell(k);
+			//iterating on the first string array of the list
+			for (int i = 0; i < (line.length - 1);) {
+				//creating row
+				row = sheet.createRow((short) r++);
+				//Comparing i with size of line
+				if (i < (line.length - 1)) {
+					//rowCount to cotrol the cell wrting on the row level
+					rowCount = 1;
+					//temp count contains the table column count as per the table number provided in the x
+					int tmpColCount = tablecolumnCount(x, 1);
+					////temp rowCOunt contains the table column count as per the table number provided in the x
+					int tmpRowCount = tableRowCount(x, 1);
+					//Checking the first and last header of the table 
+					if (line[i].equals(splitValue(prop.getProperty("firstColumnHeaderTable" + x), 1))
+							&& line[i + (tmpColCount - 1)]
+									.equals(splitValue(prop.getProperty("LastColumnHeaderTable" + x), 1))) {
+						//creating row
+						row = sheet.createRow((short) r++);
+						//iterating on the column count 
+						for (int k = 0; k < tmpColCount;) {
+							if (x == csvRowAsStrng.size()) {
+								//creating cell 
+								Cell cell = row.createCell(k);
 //										cell.setCellStyle(style);
-										cell.setCellValue(helper.createRichTextString(line[i]));
-										k++;
-										i++;
-										if (i % tmpColCount == 0 && rowCount != tmpRowCount)
-										{
-											rowCount++;
-											k = 0;
-											row = sheet.createRow((short) r++);
-										}
-									}
-									else if(!line[i].equals(splitValue(prop.getProperty("firstColumnHeaderTable"+(x+1)),1)))
-									{
-										Cell cell = row.createCell(k);
+								//setting the cell value fetched from line string array
+								cell.setCellValue(helper.createRichTextString(line[i]));
+								k++;
+								i++;
+								//Controlling the writer to write upto no of rows present in the table
+								if (i % tmpColCount == 0 && rowCount != tmpRowCount) {
+									rowCount++;
+									k = 0;
+									row = sheet.createRow((short) r++);
+								}
+							} else if (!line[i]
+									.equals(splitValue(prop.getProperty("firstColumnHeaderTable" + (x + 1)), 1))) {
+								Cell cell = row.createCell(k);
 //										cell.setCellStyle(style);
-										cell.setCellValue(helper.createRichTextString(line[i]));
-										k++;
-										i++;
-										if (i % tmpColCount == 0 && rowCount != tmpRowCount)
-										{
-											rowCount++;
-											k = 0;
-											row = sheet.createRow((short) r++);
-										}
-										
-									}
-									
+								cell.setCellValue(helper.createRichTextString(line[i]));
+								k++;
+								i++;
+								if (i % tmpColCount == 0 && rowCount != tmpRowCount) {
+									rowCount++;
+									k = 0;
+									row = sheet.createRow((short) r++);
 								}
 							}
-							else {
-								break;
-							}
-					}else {
+						}
+					} else {
 						break;
 					}
-				//}
-				
-			}	
-			
+				} else {
+					break;
+				}
+			}
 		}
-		Sheet s2 = wb.createSheet("SummaryReport"+end);
-		ExcelcsvComp ExcelcsvComp=new ExcelcsvComp();
-		
-//		System.out.println("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"+ExcelcsvComp.codeRunTime);
-//		valueSetterPropertyFile();
+		//creating sheet 3rd tab
+		Sheet s2 = wb.createSheet("SummaryReport" + end);
+		//putting all the values of summary report in the third tab
 		summaryReport(s2);
-		 
-		FileOutputStream fileOut = new FileOutputStream(finalExcelFolderPath + finalOutputExcelFile +end+".xlsx");
+		//closing the excel.
+		FileOutputStream fileOut = new FileOutputStream(finalExcelFolderPath + finalOutputExcelFile + end + ".xlsx");
 		wb.write(fileOut);
 		fileOut.close();
-		
-
 		System.out.println("File Created sucessfully.");
-}catch (IOException e) {
-    System.out.println(e);
-  }
 	}
-	
 
-	
-	public static void valueSetterPropertyFile(String key,String Value) throws IOException {
-		try {
+	//Setting the property in the env file to genrate the summar report
+	public static void valueSetterPropertyFile(String key, String Value) throws IOException {
+		
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
 		envPropfile.close();
-		
+
 		FileOutputStream out = new FileOutputStream(envPropertyFilePath);
 		envP.setProperty("summaryRepoValH3", getDate());
 		envP.setProperty("summaryRepoValH4", getTime());
 		envP.setProperty(key, Value);
-		
+
 		envP.store(out, null);
 		out.close();
-		}catch (IOException e) {
-		      System.out.println(e);
-		    }
-		
+
 	}
-	
-	
+
+	//Writing the summary report values in the 3rd tab of comparison report
 	public static void summaryReport(Sheet s2) throws IOException {
-		try {
-		 
-		int r=0;
+		int r = 0;
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
-		
-				
-		
-		for(int w=1;w<10;) {
-		 Row row = s2.createRow(w);	
-		 Cell cell = row.createCell(2);		
-		 cell.setCellValue(envP.getProperty("summaryReportH"+w));
-	
-		
-		Cell cell2=row.createCell(3);
-		cell2.setCellValue(rowCSVUtil.getValFromEnvPropFile("summaryRepoValH"+w));
-		w++;
+		for (int w = 1; w < 10;) {
+			//creating the row 
+			Row row = s2.createRow(w);
+			//creating the cell
+			Cell cell = row.createCell(2);
+			//setting the cell value from the env file 
+			cell.setCellValue(envP.getProperty("summaryReportH" + w));
+			Cell cell2 = row.createCell(3);
+			cell2.setCellValue(rowCSVUtil.getValFromEnvPropFile("summaryRepoValH" + w));
+			w++;
 		}
-		 
-		 	}catch (IOException e) {
-		      System.out.println(e);
-		    }
-		
 	}
-	  
-	  private  final static String getDate(  )  
-	  {
-	        DateFormat df = new SimpleDateFormat( "dd-MM-yyyy" ) ;
-	        df.setTimeZone( TimeZone.getTimeZone( "IST" )  ) ;
-	        return ( df.format( new Date(  )  )  ) ;
-	   }
-	  
-	 private  final static String getTime(  ) 
-	 {
-	        DateFormat df = new SimpleDateFormat( "hh-mm-ss" ) ;
-	        //df.setTimeZone ( TimeZone.getTimeZone ( "PST" )  ) ;
-	        df.setTimeZone( TimeZone.getTimeZone( "IST" )  ) ;
-	         
-	         
-	        return ( df.format( new Date(  )  )  ) ;
-	    }
-		
 
-	
-private static int tableRowCount(int xLoop, int fileNo) throws IOException {
-		
+	//getting current data
+	private final static String getDate() {
+		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+		df.setTimeZone(TimeZone.getTimeZone("IST"));
+		return (df.format(new Date()));
+	}
+	//getting current time
+	private final static String getTime() {
+		DateFormat df = new SimpleDateFormat("hh-mm-ss");
+		// df.setTimeZone ( TimeZone.getTimeZone ( "PST" ) ) ;
+		df.setTimeZone(TimeZone.getTimeZone("IST"));
+
+		return (df.format(new Date()));
+	}
+
+	//returuing the no of rows of the table 
+	private static int tableRowCount(int xLoop, int fileNo) throws IOException {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
+		//row count variable to return the number of rows for a table 
 		int tRowCount = 0;
 		int table1RowCount = Integer.parseInt((prop.getProperty("noOfRowsInTable1")).split(",")[fileNo]);
 		int table2RowCount = Integer.parseInt((prop.getProperty("noOfRowsInTable2")).split(",")[fileNo]);
 		int table3RowCount = Integer.parseInt((prop.getProperty("noOfRowsInTable3")).split(",")[fileNo]);
 		int table4RowCount = Integer.parseInt((prop.getProperty("noOfRowsInTable4")).split(",")[fileNo]);
 		int table5RowCount = Integer.parseInt((prop.getProperty("noOfRowsInTable5")).split(",")[fileNo]);
-		
 		if (xLoop == 1) {
 			tRowCount = table1RowCount;
 		}
-
 		if (xLoop == 2) {
 			tRowCount = table2RowCount;
 		}
-
 		if (xLoop == 3) {
 			tRowCount = table3RowCount;
 		}
 		if (xLoop == 4) {
-			
 			tRowCount = table4RowCount;
 		}
 		if (xLoop == 5) {
-			
 			tRowCount = table5RowCount;
 		}
 		return tRowCount;
-		
 	}
-		
+
+	//returuing the no of columns of the table 
 	private static int tablecolumnCount(int loopInt, int fileNo) throws IOException {
-		System.out.println("I am in table count method");
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
 		int tColCount = 0;
-		System.out.println("value of x is "+loopInt);	
-		int table1ColCount = Integer.parseInt(splitValue((prop.getProperty("noOfColumnsInTable1")),fileNo));
-		//System.out.println("table count 1 is :"+Integer.parseInt((prop.getProperty("noOfColumnsInTable1")).split(",")[fileNo]));
-		int table2ColCount = Integer.parseInt(splitValue((prop.getProperty("noOfColumnsInTable2")),fileNo));
-		int table3ColCount = Integer.parseInt(splitValue((prop.getProperty("noOfColumnsInTable3")),fileNo));
-		int table4ColCount = Integer.parseInt(splitValue((prop.getProperty("noOfColumnsInTable4")),fileNo));
-		int table5ColCount = Integer.parseInt(splitValue((prop.getProperty("noOfColumnsInTable5")),fileNo));
-		/*
-		 * System.out.println("table1ColCount:" + table1ColCount);
-		 * System.out.println("table2ColCount:" + table2ColCount);
-		 */
+		int table1ColCount = Integer.parseInt(splitValue((prop.getProperty("noOfColumnsInTable1")), fileNo));
+		int table2ColCount = Integer.parseInt(splitValue((prop.getProperty("noOfColumnsInTable2")), fileNo));
+		int table3ColCount = Integer.parseInt(splitValue((prop.getProperty("noOfColumnsInTable3")), fileNo));
+		int table4ColCount = Integer.parseInt(splitValue((prop.getProperty("noOfColumnsInTable4")), fileNo));
+		int table5ColCount = Integer.parseInt(splitValue((prop.getProperty("noOfColumnsInTable5")), fileNo));
 		if (loopInt == 1) {
 			tColCount = table1ColCount;
 		}
-
 		if (loopInt == 2) {
 			tColCount = table2ColCount;
 		}
-
 		if (loopInt == 3) {
 			tColCount = table3ColCount;
 		}
@@ -835,10 +665,10 @@ private static int tableRowCount(int xLoop, int fileNo) throws IOException {
 		if (loopInt == 5) {
 			tColCount = table5ColCount;
 		}
-		System.out.println("tColCount:" + tColCount);
 		return tColCount;
 	}
 
+	//calculate the variance of for the column
 	private static String calculateWRTVariance(double itemList1, double itemList2, double var) {
 		String result = "";
 
@@ -858,48 +688,50 @@ private static int tableRowCount(int xLoop, int fileNo) throws IOException {
 		return result;
 	}
 	
+	//returing the variance as per the column level
 	private static double varianceCalculator(int tableColumnCount, int iloop, int tableNumber) throws IOException {
-		
+
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
+		//Variance variable to return the variance as per the column
 		double VarianceCol1 = 0;
 		double VarianceCol2 = 0;
 		double VarianceCol3 = 0;
 		double VarianceCol4 = 0;
 		double VarianceCol5 = 0;
-		
-		switch(tableColumnCount) {
+		//switch based on the no of table column count
+		switch (tableColumnCount) {
 		case 1:
-			VarianceCol1 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col1"));
+			VarianceCol1 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col1"));
 			break;
 		case 2:
-			VarianceCol1 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col1"));
-			VarianceCol2 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col2"));
+			VarianceCol1 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col1"));
+			VarianceCol2 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col2"));
 			break;
 		case 3:
-			VarianceCol1 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col1"));
-			VarianceCol2 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col2"));
-			VarianceCol3 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col3"));
+			VarianceCol1 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col1"));
+			VarianceCol2 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col2"));
+			VarianceCol3 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col3"));
 			break;
 		case 4:
-			VarianceCol1 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col1"));
-			VarianceCol2 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col2"));
-			VarianceCol3 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col3"));
-			VarianceCol4 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col4"));
+			VarianceCol1 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col1"));
+			VarianceCol2 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col2"));
+			VarianceCol3 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col3"));
+			VarianceCol4 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col4"));
 			break;
 		case 5:
-			VarianceCol1 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col1"));
-			VarianceCol2 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col2"));
-			VarianceCol3 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col3"));
-			VarianceCol4 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col4"));
-			VarianceCol5 = Integer.parseInt(prop.getProperty("tolranceValueTable"+tableNumber+"Col5"));
+			VarianceCol1 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col1"));
+			VarianceCol2 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col2"));
+			VarianceCol3 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col3"));
+			VarianceCol4 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col4"));
+			VarianceCol5 = Integer.parseInt(prop.getProperty("tolranceValueTable" + tableNumber + "Col5"));
 			break;
 		}
-				
+
 		double variance = 0;
-		
-		switch(tableColumnCount) {
+
+		switch (tableColumnCount) {
 		case 5:
 			if (iloop % tableColumnCount == 0) {
 				variance = VarianceCol1;
@@ -913,31 +745,23 @@ private static int tableRowCount(int xLoop, int fileNo) throws IOException {
 				variance = VarianceCol5;
 			}
 			break;
-			
+
 		case 4:
 			if (iloop % tableColumnCount == 3) {
 				variance = VarianceCol1;
-				System.out.println("iloop : " + iloop);
-				System.out.println("variance : " + variance);
-				System.out.println("VarianceCol1 : " + VarianceCol1);
+
 			} else if (iloop % tableColumnCount == 0) {
 				variance = VarianceCol2;
-				System.out.println("iloop : " + iloop);
-				System.out.println("variance : " + variance);
-				System.out.println("VarianceCol2 : " + VarianceCol2);
+
 			} else if (iloop % tableColumnCount == 1) {
 				variance = VarianceCol3;
-				System.out.println("iloop : " + iloop);
-				System.out.println("variance : " + variance);
-				System.out.println("VarianceCol3 : " + VarianceCol3);
+
 			} else if (iloop % tableColumnCount == 2) {
 				variance = VarianceCol4;
-				System.out.println("iloop : " + iloop);
-				System.out.println("variance : " + variance);
-				System.out.println("VarianceCol4 : " + VarianceCol4);
+
 			}
 			break;
-			
+
 		case 3:
 			if (iloop % tableColumnCount == 3) {
 				variance = VarianceCol1;
@@ -947,7 +771,7 @@ private static int tableRowCount(int xLoop, int fileNo) throws IOException {
 				variance = VarianceCol3;
 			}
 			break;
-		
+
 		case 2:
 			if (iloop % tableColumnCount == 0) {
 				variance = VarianceCol1;
@@ -955,34 +779,15 @@ private static int tableRowCount(int xLoop, int fileNo) throws IOException {
 				variance = VarianceCol2;
 			}
 			break;
-			
+
 		case 1:
 			if (iloop % tableColumnCount == 0) {
 				variance = VarianceCol1;
 			}
 			break;
-	}
+		}
 		return variance;
 	}
 
-	
 
-// public static boolean structureVerification(String colHeader) {
-//	 System.out.println(colHeader);
-//		String[] test = colHeader.split(",");
-//		System.out.println(test[0]);
-//		System.out.println("this is integer");
-//		if(test[0].equalsIgnoreCase(test[1])) {
-//			
-//			return true;
-//		}else
-//		{
-//			return false;
-//		}
-//	 
-//	
-//	 
-// }
- 
- 
 }

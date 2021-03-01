@@ -10,56 +10,32 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ExcelcsvComp extends csvUtils{
-	public static Logger log = LogManager.getLogger(ExcelcsvComp.class.getName());
 	
-	public ExcelcsvComp() throws IOException {
-		
-		super();
-		 
+	//This class is used for Comparing PROD and UAT Excel and produce the results.
+	
+	public ExcelcsvComp() throws IOException {		
+		super();		 
 	}
 	static long startTime = System.currentTimeMillis();
-	
-	
-	
-	public static void main(String[] args) throws Exception  {	
-		try
-		{
 		
-		log.info("started file converstion");
-		//Converts Excel to CSV file as per the parameters provided in Config file		
-//		String configPropertyFilePath = "C:\\Users\\ankit\\git\\repository\\ExcelComparator\\src\\test\\java\\SelniumPractice\\WebAutomation\\config.properties";
-//		String envPropertyFilePath = "C:\\Users\\ankit\\git\\repository\\ExcelComparator\\src\\test\\java\\SelniumPractice\\WebAutomation\\env.properties";
-//		FileInputStream fis = new FileInputStream(configPropertyFilePath);
-//		Properties prop = new Properties();
-//		prop.load(fis);
-//		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
-//		Properties envP = new Properties();
-//		envP.load(envPropfile);		
-		csvUtils obj1 = new csvUtils();
-//		System.out.println(envP.getProperty("inputExcelFileName"));
-		structureCheck(envP.getProperty("inputExcelFileName"),1);
+	public static void main(String[] args) throws Exception  {
+		System.out.println("Comparison between "+getValFromEnvPropFile("inputExcelFileName")+".xlsx"+" & "+ getValFromEnvPropFile("inputExcelTemplate")+".xlsx has been iniated.");
+//		Structure Check Methods checks the Structure of the table.
+		structureCheck(getValFromEnvPropFile("inputExcelFileName"),1);
 		finalData = new StringBuffer();
-		structureCheck(envP.getProperty("inputExcelTemplate"),2);
-		
-		rowCSVUtil rowCSVUtil= new rowCSVUtil();
-		
-//		masterCSVGenrator(envP.getProperty("inputExcelFileName"));
-//		masterCSVGenrator(envP.getProperty("inputExcelTemplate"));		
+		structureCheck(getValFromEnvPropFile("inputExcelTemplate"),2);		
 		//Compare Actual and Baseline CSV and Generates a 3rd CSV 
 		csvComparison();
-//		System.out.println("Actual and Baseline CSV comparison completed.\n");
-//		//Converts Back the CSV to Excel
+		//Converts Back the CSV to Excel
 		long endTime   = System.currentTimeMillis();
-		System.out.println(totalTime(startTime,endTime));
+		//Values Updated in ENV Property file for Summary Report
 		valueSetterPropertyFile("summaryRepoValH5",totalTime(startTime,endTime));
+		//Final Excel Creation.
 		csvtoExcelCOnverion();
-		System.out.println("csv to Excel conversion completed.\n");	
-	log.info("csv to Excel conversion completed");
-		} catch (Exception e){			 
-			 throw (e);
-			 	 }
+		System.out.println("Comparison has been completed.\n The File is placed on the below path \n"+getValFromEnvPropFile("finalExcelFolderPath"));		
 		}
 	
+	//totalTime method returns the total time took to run the code in seconds.
 	public static String totalTime(long startTime,long endTime) {
 		long totalTime=endTime-startTime;
 		long totalRuntime=totalTime/1000;
