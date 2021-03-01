@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -16,11 +18,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.testng.Assert;
 
 public class excelUtils {
-	
-
-	
+	private static Logger log = LogManager.getLogger(ExcelcsvComp.class.getName());
 		public void verifyIfExcelFilesHaveSameNumberAndNameOfSheets(Workbook workbook1, Workbook workbook2) {
 			System.out.println("Verifying if both work books have same number of sheets.............");
+			log.info("Verifying if both work books have same number of sheets.....");
 			// Get total sheets count from first excel file
 			int sheetsInWorkbook1 = workbook1.getNumberOfSheets();
 			// Get total sheets count from second excel file
@@ -34,7 +35,7 @@ public class excelUtils {
 			System.out.println("Sheets in first work book : "+sheetsInWorkbook1);
 			System.out.println("Sheets in second work book : "+sheetsInWorkbook2);
 			System.out.println("Both work books have same number of sheets.........................");
-			
+			log.info("Both work books have same number of sheets..");
 			// Verify if sheets have same name in both workbooks
 			// Sheets may not be in same order in both excel. So I am relaxing order of sheets condition.
 			// Change i as required.
@@ -60,6 +61,7 @@ public class excelUtils {
 		public void verifySheetsInExcelFilesHaveSameRowsAndColumns(Workbook workbook1, Workbook workbook2) {
 			System.out.println(
 					"Verifying if both work books have same number of rows and columns in all sheets.............");
+			log.info("Verifying if both work books have same number of rows and columns in all sheets.");
 			int sheetCounts = workbook1.getNumberOfSheets();
 			for (int i = 0; i < sheetCounts; i++) {
 				Sheet s1 = workbook1.getSheetAt(i);
@@ -80,6 +82,7 @@ public class excelUtils {
 
 		public void verifyDataInExcelBookAllSheets(Workbook workbook1, Workbook workbook2) {
 			System.out.println("Verifying if both work books have same data.............");
+			log.info("Verifying if both work books have same data....");
 			// Since we have already verified that both work books have same number of sheets so iteration can be done against any workbook sheet count
 			int sheetCounts = workbook1.getNumberOfSheets();
 			// So we will iterate through sheet by sheet
@@ -136,6 +139,7 @@ public class excelUtils {
 				}
 			}
 			System.out.println("Hurray! Both work books have same data.");
+			log.info("Hurray! Both work books have same data.");
 		}
 	}
 

@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ExcelcsvComp extends csvUtils{
+	private static Logger log = LogManager.getLogger(ExcelcsvComp.class.getName());
 	
 	//This class is used for Comparing PROD and UAT Excel and produce the results.
 	
@@ -33,7 +34,8 @@ public class ExcelcsvComp extends csvUtils{
 		//Final Excel Creation.
 		csvtoExcelCOnverion();
 		System.out.println("Comparison has been completed.\n The File is placed on the below path \n"+getValFromEnvPropFile("finalExcelFolderPath"));		
-		}
+	log.info("Comparison has been completed");	
+	}
 	
 	//totalTime method returns the total time took to run the code in seconds.
 	public static String totalTime(long startTime,long endTime) {

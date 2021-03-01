@@ -7,12 +7,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class missingValueExtractor extends csvUtils {
-	
+	private static Logger log = LogManager.getLogger(missingValueExtractor.class.getName());
 //This method is used for extracting the Missing values from the header in between Prod and UAT data.
 	
 	public missingValueExtractor() throws IOException {
@@ -113,6 +115,7 @@ public class missingValueExtractor extends csvUtils {
 		ArrayList ClmHdrsPrd = new ArrayList();
 		String path= "C:\\Users\\ankit\\Desktop\\Excel\\";
 		// TODO Auto-generated method stub
+		try {
 		FileInputStream fis=new FileInputStream(path+fileName+".xlsx");
 		XSSFWorkbook wb=new XSSFWorkbook(fis);
 		ArrayList<String> al1= new ArrayList<>();
@@ -142,6 +145,9 @@ public class missingValueExtractor extends csvUtils {
 			}
 		}
 	}
+		}catch (IOException e) {
+	      System.out.println(e);
+	    }
 		return ClmHdrsPrd;
 
 	}

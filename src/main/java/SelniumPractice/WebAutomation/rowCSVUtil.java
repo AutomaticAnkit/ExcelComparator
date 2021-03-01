@@ -83,29 +83,41 @@ public class rowCSVUtil {
 		 
 	 }
 	 public static String getValFromConfigPropFile(String Key) throws IOException {
+		 try {
 		 FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		 Properties prop = new Properties();
 			prop.load(fis);
+		 }catch (IOException e) {
+		      System.out.println(e);
+		    }
 			String value=prop.getProperty(Key);
 			return value;
 		 
 	 }
 	 
 	 public static String getValFromEnvPropFile(String Key) throws IOException {
+		 try {
 		 FileInputStream fis = new FileInputStream(envPropertyFilePath);
 		 Properties envP = new Properties();
 			envP.load(fis);
+		 }catch (IOException e) {
+		      System.out.println(e);
+		    }
 			String value=envP.getProperty(Key);
 			return value;
 		 
 	 }
 	 
 	 public static void loadConfigFile() throws IOException {
+		 try {
 		 FileInputStream fis = new FileInputStream(configPropertyFilePath);
 			prop.load(fis);
 			System.out.println("prop :" + prop.getProperty("noOfColumnsInTable1"));
 			FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 			envP.load(envPropfile);
+		 }catch (IOException e) {
+		      System.out.println(e);
+		    }
 	 }
 
 	 public static void getConfigValue()
@@ -221,7 +233,7 @@ public class rowCSVUtil {
 		}
 	}
 	public static void masterCSVGenrator(String fileName, String fh, String lh, int nc, int nr, int tableNo) throws IOException {
-
+		try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
@@ -229,6 +241,10 @@ public class rowCSVUtil {
 		Properties envP = new Properties();
 		envP.load(envPropfile);
 		log.info("ENV file loaded");
+		}catch (IOException e) {
+		      System.out.println(e);
+		      log.info("ENV file not loaded");
+		    }
 		test t = new test();
 		String inputExcelFileName = fileName;
 		System.out.println("fileName:" + fileName);
@@ -274,7 +290,7 @@ System.out.println("Final Data Value : " + finalData);
 
 	public static StringBuffer tabletoStringGenrator(String fileName, String firstHeader, String lastHeader,
 			int numberOfCOlumns, int numberOfRows, ArrayList listOfIgnoreCols) throws IOException {
-
+		try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
@@ -282,6 +298,9 @@ System.out.println("Final Data Value : " + finalData);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
 		String path = envP.getProperty("folderPathforInputExcel");
+		}catch (IOException e) {
+		      System.out.println(e);
+		    }
 		FileInputStream fileInStream = new FileInputStream(path + fileName + ".xlsx");
 		int rowcount = 1;
 		ArrayList ignoreColNo = new ArrayList();
@@ -461,7 +480,7 @@ System.out.println("Final Data Value : " + finalData);
 	}
 
 	public static void csvComparison() throws IOException {
-
+try {
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
@@ -581,12 +600,14 @@ System.out.println("Final Data Value : " + finalData);
 		int size = al1.size();
 		System.out.println("Number of Values found diff are  " + size);
 		System.out.println(" ");
-
+}catch (IOException e) {
+    System.out.println(e);
+  }
 	}
 
 	public static void csvtoExcelCOnverion() throws IOException {
 		// Data from CSV inserted into array
-
+try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
@@ -685,6 +706,9 @@ System.out.println("Final Data Value : " + finalData);
 		fileOut.close();
 
 		System.out.println("File Created sucessfully.");
+}catch (IOException e) {
+    System.out.println(e);
+  }
 	}
 	
 	

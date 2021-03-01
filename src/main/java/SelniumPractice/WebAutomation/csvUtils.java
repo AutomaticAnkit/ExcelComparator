@@ -52,12 +52,24 @@ public class csvUtils {
 	static StringBuffer finalData = new StringBuffer();
 	
 	public static void propertyFileLoader() throws IOException {
+		try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
+		log.info("Configuration file loaded");
+		}catch (IOException e) {
+		      System.out.println(e);
+		      log.error("Configuration file not loaded");
+		    }
+		try {
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
+		log.info("Environment property file loaded");
+		} catch (IOException e) {
+		      System.out.println(e);
+		      log.error("Environment property file loaded");
+		    }
 	}
 
 	public csvUtils() throws IOException {
@@ -66,25 +78,41 @@ public class csvUtils {
 	}
 
 	public static String getValFromConfigPropFile(String Key) throws IOException {
+		try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
+		log.info("Value loaded from the confi file");
+		} catch (IOException e) {
+		      System.out.println(e);
+		      log.info("Value is not loaded from the confi file");
+		    }
 		String value = prop.getProperty(Key);
 		return value;
 	}
 
 	public static String getValFromEnvPropFile(String Key) throws IOException {
+		try {
 		FileInputStream fis = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(fis);
+		log.info("Value loaded from the environment file");
+		} catch (IOException e) {
+		      System.out.println(e);
+		      log.info("Value  is not loaded from the environment file");
+		    }
 		String value = envP.getProperty(Key);
 		return value;
 	}
 	public static void loadConfigFile() throws IOException {
+		try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		prop.load(fis);
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		envP.load(envPropfile);
+		} catch (IOException e) {
+		      System.out.println(e);
+		    }
 	}
 
 	public static void getConfigValue() {
@@ -104,14 +132,23 @@ public class csvUtils {
 	//This method is used for checking the structure of the table.
 	public static void structureCheck(String fileName, int fileNo) throws IOException {
 		//Config Property file loaded
+		try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
+		} catch (IOException e) {
+		      System.out.println(e);
+		    }
 		log.info("Config File Loaded");
 		//Env Property file loaded
+		try {
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
+		} catch (IOException e) {
+		      System.out.println(e);
+		    }
+		log.info("Environment file loaded");
 		System.out.println(fileName);
 		//For loop iterating on no of tables
 		for (int i = 1; i <= Integer.parseInt(prop.getProperty("totalTables")); i++) {
@@ -136,12 +173,17 @@ public class csvUtils {
 	//This method  generates the CSV for the Excel on the basis of first header last header , No of column and no of rows.
 	public static void masterCSVGenrator(String fileName, String fh, String lh, int nc, int nr, int tableNo)
 			throws IOException {
+		try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
+		}
+	    catch (IOException e) {
+	      System.out.println(e);
+	    }
 		missingValueExtractor missingValue = new missingValueExtractor();
 		String inputExcelFileName = fileName;
 		//String buffer table 1 gets the values of table appended by ","
@@ -165,15 +207,21 @@ public class csvUtils {
 			int numberOfCOlumns, int numberOfRows, ArrayList listOfIgnoreCols) throws IOException {
 		//listOfIgnoreCols contains the values are that needs to be ignored while CSV generation.
 		//Values which are not present in prod and present in template will be ignored.
-		FileInputStream fis = new FileInputStream(configPropertyFilePath);
+		
+		try{
+			FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
 		String path = envP.getProperty("folderPathforInputExcel");
+		}
+    catch (IOException e) {
+	      System.out.println(e);
+	    }
 		FileInputStream fileInStream = new FileInputStream(path + fileName + ".xlsx");
-		int rowcount = 1;
+			int rowcount = 1;
 		ArrayList ignoreColNo = new ArrayList();
 		XSSFWorkbook workBook = new XSSFWorkbook(fileInStream);// Open the xlsx and get the requested sheet from the workbook
 		XSSFSheet s1 = workBook.getSheetAt(0);// Get Sheet from WorkBook
@@ -308,7 +356,7 @@ public class csvUtils {
 
 	//This method compares the PROD and UAT CSV generated in structure check method
 	public static void csvComparison() throws IOException {
-
+try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
@@ -440,11 +488,14 @@ public class csvUtils {
 		int size = al1.size();
 		System.out.println("Number of Values found diff are  " + size);
 		System.out.println(" ");
-
+		}catch (IOException e) {
+      System.out.println(e);
+    }
 	}
 	
 	//This method is used for csv to Excel Converion and genrate the Final Excel with results
 	public static void csvtoExcelCOnverion() throws IOException {
+		try {
 		// Data from CSV inserted into array
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
@@ -555,11 +606,14 @@ public class csvUtils {
 		wb.write(fileOut);
 		fileOut.close();
 		System.out.println("File Created sucessfully.");
+		}  catch (IOException e) {
+		      System.out.println(e);
+		    }
 	}
 
 	//Setting the property in the env file to genrate the summar report
 	public static void valueSetterPropertyFile(String key, String Value) throws IOException {
-		
+		try {
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
@@ -572,12 +626,16 @@ public class csvUtils {
 
 		envP.store(out, null);
 		out.close();
-
+		} 
+	    catch (IOException e) {
+		      System.out.println(e);
+		    }
 	}
 
 	//Writing the summary report values in the 3rd tab of comparison report
 	public static void summaryReport(Sheet s2) throws IOException {
 		int r = 0;
+		try {
 		FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 		Properties envP = new Properties();
 		envP.load(envPropfile);
@@ -592,6 +650,10 @@ public class csvUtils {
 			cell2.setCellValue(rowCSVUtil.getValFromEnvPropFile("summaryRepoValH" + w));
 			w++;
 		}
+		} 
+	    catch (IOException e) {
+		      System.out.println(e);
+		    }
 	}
 
 	//getting current data
@@ -611,9 +673,14 @@ public class csvUtils {
 
 	//returuing the no of rows of the table 
 	private static int tableRowCount(int xLoop, int fileNo) throws IOException {
+		try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
+		} 
+	    catch (IOException e) {
+		      System.out.println(e);
+		    }
 		//row count variable to return the number of rows for a table 
 		int tRowCount = 0;
 		int table1RowCount = Integer.parseInt((prop.getProperty("noOfRowsInTable1")).split(",")[fileNo]);
@@ -641,9 +708,14 @@ public class csvUtils {
 
 	//returuing the no of columns of the table 
 	private static int tablecolumnCount(int loopInt, int fileNo) throws IOException {
+		try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
+		} 
+	    catch (IOException e) {
+		      System.out.println(e);
+		    }
 		int tColCount = 0;
 		int table1ColCount = Integer.parseInt(splitValue((prop.getProperty("noOfColumnsInTable1")), fileNo));
 		int table2ColCount = Integer.parseInt(splitValue((prop.getProperty("noOfColumnsInTable2")), fileNo));
@@ -690,10 +762,14 @@ public class csvUtils {
 	
 	//returing the variance as per the column level
 	private static double varianceCalculator(int tableColumnCount, int iloop, int tableNumber) throws IOException {
-
+		try {
 		FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		Properties prop = new Properties();
 		prop.load(fis);
+		} 
+		catch (IOException e) {
+      System.out.println(e);
+		}
 		//Variance variable to return the variance as per the column
 		double VarianceCol1 = 0;
 		double VarianceCol2 = 0;
