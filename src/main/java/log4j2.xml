@@ -5,7 +5,7 @@
 </Properties>
  
   <Appenders>
-      <RollingFile name="File" fileName="${basePath}/prints.log" filePattern="${basePath}/prints-%d{yyyy-MM-dd}.log">
+      <RollingFile name="File" fileName="${basePath}/Excelcomparator.log" filePattern="${basePath}/Excelcomparator-%d{yyyy-MM-dd}.log">
      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
       <SizeBasedTriggeringPolicy size="500" />
           </RollingFile>
@@ -14,7 +14,7 @@
     </Console>
   </Appenders>
   <Loggers>
-    <Root level="trace">
+    <Root level="info">
       <AppenderRef ref="File"/>
     </Root>
   </Loggers>
