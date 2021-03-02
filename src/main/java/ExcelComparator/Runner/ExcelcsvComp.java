@@ -1,16 +1,12 @@
 package ExcelComparator.Runner;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Properties;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
-import ExcelComparator.Utils.GeneralUtils;
 import ExcelComparator.Tests.csvUtils;
+import ExcelComparator.Utils.GeneralUtils;
 
 public class ExcelcsvComp extends csvUtils{
 	private static Logger log = LogManager.getLogger(ExcelcsvComp.class.getName());
@@ -34,7 +30,7 @@ public class ExcelcsvComp extends csvUtils{
 		structureCheck(GeneralUtils.getEnvironment("inputExcelTemplate"),2);		
 		log.info("Validated the Structure of table for "+GeneralUtils.getEnvironment("inputExcelTemplate") );
 		//Compare Actual and Baseline CSV and Generates a 3rd CSV 
-		csvComparison();
+		csvComparison(missingValuesMap);
 		log.info("Compared the ACtual and Baseline CSV and Generates 3rd CSV");
 		//Converts Back the CSV to Excel
 		long endTime   = System.currentTimeMillis();
