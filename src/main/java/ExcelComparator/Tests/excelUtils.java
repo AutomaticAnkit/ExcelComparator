@@ -1,4 +1,4 @@
-package SelniumPractice.WebAutomation;
+package ExcelComparator.Tests;
 
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.testng.Assert;
 
 public class excelUtils {
-	private static Logger log = LogManager.getLogger(ExcelcsvComp.class.getName());
+	private static Logger log = LogManager.getLogger(excelUtils.class.getName());
 		public void verifyIfExcelFilesHaveSameNumberAndNameOfSheets(Workbook workbook1, Workbook workbook2) {
 			System.out.println("Verifying if both work books have same number of sheets.............");
 			log.info("Verifying if both work books have same number of sheets.....");

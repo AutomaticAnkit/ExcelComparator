@@ -1,0 +1,5 @@
+17:12:35.422 [main] INFO  ExcelComparator.Runner.ExcelcsvComp - Validated the Structure of table for Template
+17:12:35.507 [main] INFO  ExcelComparator.Runner.ExcelcsvComp - Compared the ACtual and Baseline CSV and Generates 3rd CSV
+17:12:35.513 [main] INFO  ExcelComparator.Runner.ExcelcsvComp - Values updated in the ENV file
+17:12:35.832 [main] INFO  ExcelComparator.Runner.ExcelcsvComp - Converted CSV into Excel
+17:12:35.833 [main] INFO  ExcelComparator.Runner.ExcelcsvComp - Comparison has been completed

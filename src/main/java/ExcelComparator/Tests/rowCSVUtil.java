@@ -1,4 +1,4 @@
-package SelniumPractice.WebAutomation;
+package ExcelComparator.Tests;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,9 +37,12 @@ import org.bouncycastle.jcajce.provider.symmetric.ARC4.Base;
 import com.opencsv.CSVReaderBuilder;
 
 public class rowCSVUtil {
-	
-	static String configPropertyFilePath = "C:\\Users\\ankit\\git\\repository\\ExcelComparator\\src\\test\\java\\SelniumPractice\\WebAutomation\\config.properties";
-	static String envPropertyFilePath = "C:\\Users\\ankit\\git\\repository\\ExcelComparator\\src\\test\\java\\SelniumPractice\\WebAutomation\\env.properties";
+	 static String user_dir = System.getProperty("user.dir");
+		static String configPropertyFilePath = user_dir + "\\src\\test\\java\\SelniumPractice\\WebAutomation\\config.properties";
+		static String envPropertyFilePath = user_dir+ "\\src\\test\\java\\SelniumPractice\\WebAutomation\\env.properties";
+		
+	//static String configPropertyFilePath = "C:\\Users\\ankit\\git\\repository\\ExcelComparator\\src\\test\\java\\SelniumPractice\\WebAutomation\\config.properties";
+	//static String envPropertyFilePath = "C:\\Users\\ankit\\git\\repository\\ExcelComparator\\src\\test\\java\\SelniumPractice\\WebAutomation\\env.properties";
 	private static Logger log=LogManager.getLogger(rowCSVUtil.class.getName());
 	boolean result = true;
 	static Properties prop = new Properties();
@@ -82,7 +85,7 @@ public class rowCSVUtil {
 		 System.out.println("---------------------------************************");
 		 
 	 }
-	 public static String getValFromConfigPropFile(String Key) throws IOException {
+	public static String getValFromConfigPropFile(String Key) throws IOException {
 		 try {
 		 FileInputStream fis = new FileInputStream(configPropertyFilePath);
 		 Properties prop = new Properties();
@@ -109,15 +112,15 @@ public class rowCSVUtil {
 	 }
 	 
 	 public static void loadConfigFile() throws IOException {
-		 try {
+		/* try {
 		 FileInputStream fis = new FileInputStream(configPropertyFilePath);
-			prop.load(fis);
+			prop.load(fis);*/
 			System.out.println("prop :" + prop.getProperty("noOfColumnsInTable1"));
-			FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
+			/*FileInputStream envPropfile = new FileInputStream(envPropertyFilePath);
 			envP.load(envPropfile);
 		 }catch (IOException e) {
 		      System.out.println(e);
-		    }
+		    }*/
 	 }
 
 	 public static void getConfigValue()
